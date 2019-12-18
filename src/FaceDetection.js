@@ -1,7 +1,7 @@
 'use strict';
 import React, {PureComponent} from 'react';
-import {AppRegistry, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {RNCamera} from 'react-native-camera';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {RNCamera,FaceDetector} from 'react-native-camera';
 
 export default class ExampleApp extends PureComponent {
 
@@ -48,6 +48,9 @@ export default class ExampleApp extends PureComponent {
                     onFacesDetected={(faces) => {
                         console.log("onFacesDetected", faces);
                     }}
+                    onFaceDetectionError={(error)=>{
+                        console.log("onFaceDetectionError",error);
+                    }}
                     onCameraReady={async (event)=>{
                         console.log('onCameraReady',event);
                     }}
@@ -71,6 +74,11 @@ export default class ExampleApp extends PureComponent {
             const data = await this.camera.takePictureAsync(options);
             console.log(data.uri);
             alert("uri:" + data.uri);
+            FaceDetector.detectFacesAsync(data.uri).then((res)=>{
+                console.log("detectFacesAsync.then",res);
+            }).catch((ex)=>{
+                console.log("detectFacesAsync.catch",ex);
+            })
         }
     };
 
